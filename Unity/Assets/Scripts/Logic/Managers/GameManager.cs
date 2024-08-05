@@ -14,22 +14,21 @@ using UnityEngine;
 using Debug = Lockstep.Logging.Debug;
 using Profiler = Lockstep.Util.Profiler;
 
-public class GameManager : BaseManager {
+public class GameManager : BaseManager
+{
     public static GameManager Instance { get; private set; }
     [Header("Collision")] public CollisionManager collisionManager;
     public int maxBspDepth;
     public int maxBspDepthNodeId;
 
-    [Header("Configs")] 
-    public PlayerServerInfo playerConfig;
+    [Header("Configs")] public PlayerServerInfo playerConfig;
     public int maxEnemyCount = int.MaxValue;
     public Material debugMat;
-    
+
     [Header("Recoder")] public bool IsReplay = false;
     public string recordFilePath;
 
-    [Header("frame datas")]  
-    public int mapId;
+    [Header("frame datas")] public int mapId;
     private bool hasStart = false;
     public int inputTick;
     public int predictTickCount = 3;
@@ -41,22 +40,23 @@ public class GameManager : BaseManager {
     public int curMapId = 0;
     public PlayerServerInfo[] playerServerInfos;
     public FrameInput CurFrameInput;
-    
-    [Header("ping")] 
-    public static int pingVal;
+
+    [Header("ping")] public static int pingVal;
     public static List<float> delays = new List<float>();
     public Dictionary<int, float> tick2SendTimer = new Dictionary<int, float>();
 
-    [Header("game data")] 
-    public static List<Player> allPlayers = new List<Player>();
+    [Header("game data")] public static List<Player> allPlayers = new List<Player>();
     public static Player player;
     public static Transform playerTrans;
     public float remainTime;
     private List<BaseManager> _mgrs = new List<BaseManager>();
 
     public NetClient netClient;
-    private static string _traceLogPath {
-        get {
+
+    private static string _traceLogPath
+    {
+        get
+        {
 #if UNITY_STANDALONE_OSX
             return $"/tmp/LPDemo/Dump_{Instance.localPlayerId}.txt";
 #else
@@ -65,63 +65,78 @@ public class GameManager : BaseManager {
         }
     }
 
-    public void RegisterManagers(BaseManager mgr){
+    public void RegisterManagers(BaseManager mgr)
+    {
         _mgrs.Add(mgr);
     }
 
 
-    private void Awake(){
+    private void Awake()
+    {
         Screen.SetResolution(1024, 768, false);
         gameObject.AddComponent<PingMono>();
         _Awake();
     }
 
-    private void Start(){
+    private void Start()
+    {
         _Start();
     }
 
-    private void _Awake(){
+    private void _Awake()
+    {
 #if !UNITY_EDITOR
         IsReplay = false;
 #endif
         DoAwake();
-        foreach (var mgr in _mgrs) {
+        foreach (var mgr in _mgrs)
+        {
             mgr.DoAwake();
         }
     }
 
 
-    private void _Start(){
+    private void _Start()
+    {
         DoStart();
-        foreach (var mgr in _mgrs) {
+        foreach (var mgr in _mgrs)
+        {
             mgr.DoStart();
         }
 
         Debug.Trace("Before StartGame _IdCounter" + BaseEntity._IdCounter);
-        if (!IsReplay) {
+        if (!IsReplay)
+        {
             netClient = new NetClient();
             netClient.Start();
-            netClient.Send(new Msg_JoinRoom() {name = Application.dataPath});
+            netClient.Send(new Msg_JoinRoom() { name = Application.dataPath });
         }
-        else {
+        else
+        {
             StartGame(0, playerServerInfos, localPlayerId);
         }
     }
 
-    private void Update(){
+    private void Update()
+    {
         _DoUpdate();
     }
 
-    private void _DoUpdate(){
+    private void _DoUpdate()
+    {
         if (!hasStart) return;
         remainTime += Time.deltaTime;
-        while (remainTime >= 0.03f) {
+        while (remainTime >= 0.03f)
+        {
             remainTime -= 0.03f;
             //send input
-            if (!IsReplay) {
+            if (!IsReplay)
+            {
                 SendInput();
             }
-            if (GetFrame(curFrameIdx) == null) {
+
+            if (GetFrame(curFrameIdx) == null)
+            {
                 return;
             }
 
@@ -130,21 +145,24 @@ public class GameManager : BaseManager {
     }
 
 
-
-    public void SendInput(){
+    public void SendInput()
+    {
         predictTickCount = 2; //Mathf.Clamp(Mathf.CeilToInt(pingVal / 30), 1, 20);
-        if (inputTick > predictTickCount + maxServerFrameIdx) {
+        if (inputTick > predictTickCount + maxServerFrameIdx)
+        {
             return;
         }
 
-        var playerInput = new PlayerInput() {
+        var playerInput = new PlayerInput()
+        {
             mousePos = InputManager.mousePos,
             inputUV = InputManager.inputUV,
             isInputFire = InputManager.isInputFire,
             skillId = InputManager.skillId,
             isSpeedUp = InputManager.isSpeedUp,
         };
-        netClient.Send(new Msg_PlayerInput() {
+        netClient.Send(new Msg_PlayerInput()
+        {
             input = playerInput,
             tick = inputTick
         });
@@ -153,7 +171,8 @@ public class GameManager : BaseManager {
         inputTick++;
     }
 
-    public void StartGame(int mapId, PlayerServerInfo[] playerInfos, int localPlayerId){
+    public void StartGame(int mapId, PlayerServerInfo[] playerInfos, int localPlayerId)
+    {
         hasStart = true;
         curMapId = mapId;
         //navmesh init
@@ -161,38 +180,45 @@ public class GameManager : BaseManager {
         NavMeshManager.DoInit(txt.text);
         maxBspDepth = BspTree.maxDepth;
         maxBspDepthNodeId = BspTree.maxDepthNodeId;
-        
+
         this.playerCount = playerInfos.Length;
         this.playerServerInfos = playerInfos;
         this.localPlayerId = localPlayerId;
         Debug.TraceSavePath = _traceLogPath;
         allPlayers.Clear();
-        for (int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++)
+        {
             Debug.Trace("CreatePlayer");
-            allPlayers.Add(new Player() {localId = i});
+            allPlayers.Add(new Player() { localId = i });
         }
 
         //create Players 
-        for (int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++)
+        {
             var playerInfo = playerInfos[i];
             var prefab = ResourceManager.LoadPrefab(playerInfo.PrefabId);
-            CollisionManager.Instance.RigisterPrefab(prefab, (int) EColliderLayer.Hero);
+            CollisionManager.Instance.RigisterPrefab(prefab, (int)EColliderLayer.Hero);
             HeroManager.InstantiateEntity(allPlayers[i], playerInfo.PrefabId, playerInfo.initPos);
         }
     }
 
-    private void Step(){
+    private void Step()
+    {
         UpdateFrameInput();
-        if (IsReplay) {
-            if (curFrameIdx < frames.Count) {
+        if (IsReplay)
+        {
+            if (curFrameIdx < frames.Count)
+            {
                 Replay(curFrameIdx);
                 curFrameIdx++;
             }
         }
-        else {
+        else
+        {
             Recoder();
             //send hash
-            netClient.Send(new Msg_HashCode() {
+            netClient.Send(new Msg_HashCode()
+            {
                 tick = curFrameIdx,
                 hash = GetHash()
             });
@@ -200,20 +226,25 @@ public class GameManager : BaseManager {
             curFrameIdx++;
         }
     }
-    private void Recoder(){
+
+    private void Recoder()
+    {
         _Update();
     }
-    
+
     //{string.Format("{0:yyyyMMddHHmmss}", DateTime.Now)}_
-    public int GetHash(){
+    public int GetHash()
+    {
         int hash = 1;
         int idx = 0;
-        foreach (var entity in allPlayers) {
+        foreach (var entity in allPlayers)
+        {
             hash += entity.currentHealth.GetHash() * PrimerLUT.GetPrimer(idx++);
             hash += entity.transform.GetHash() * PrimerLUT.GetPrimer(idx++);
         }
 
-        foreach (var entity in EnemyManager.Instance.allEnemy) {
+        foreach (var entity in EnemyManager.Instance.allEnemy)
+        {
             hash += entity.currentHealth.GetHash() * PrimerLUT.GetPrimer(idx++);
             hash += entity.transform.GetHash() * PrimerLUT.GetPrimer(idx++);
         }
@@ -222,23 +253,28 @@ public class GameManager : BaseManager {
     }
 
 
-    public static void StartGame(Msg_StartGame msg){
+    public static void StartGame(Msg_StartGame msg)
+    {
         UnityEngine.Debug.Log("StartGame");
         Instance.StartGame(msg.mapId, msg.playerInfos, msg.localPlayerId);
     }
 
-    public static void PushFrameInput(FrameInput input){
+    public static void PushFrameInput(FrameInput input)
+    {
         var frames = Instance.frames;
-        for (int i = frames.Count; i <= input.tick; i++) {
+        for (int i = frames.Count; i <= input.tick; i++)
+        {
             frames.Add(new FrameInput());
         }
 
-        if (frames.Count == 0) {
+        if (frames.Count == 0)
+        {
             Instance.remainTime = 0; //收到第一帧输入的时候才开始真正的执行追帧
         }
 
         maxServerFrameIdx = Math.Max(maxServerFrameIdx, input.tick);
-        if (Instance.tick2SendTimer.TryGetValue(input.tick, out var val)) {
+        if (Instance.tick2SendTimer.TryGetValue(input.tick, out var val))
+        {
             delays.Add(Time.realtimeSinceStartup - val);
         }
 
@@ -247,10 +283,13 @@ public class GameManager : BaseManager {
     }
 
 
-    public FrameInput GetFrame(int tick){
-        if (frames.Count > tick) {
+    public FrameInput GetFrame(int tick)
+    {
+        if (frames.Count > tick)
+        {
             var frame = frames[tick];
-            if (frame != null && frame.tick == tick) {
+            if (frame != null && frame.tick == tick)
+            {
                 return frame;
             }
         }
@@ -258,36 +297,44 @@ public class GameManager : BaseManager {
         return null;
     }
 
-    private void UpdateFrameInput(){
+    private void UpdateFrameInput()
+    {
         CurFrameInput = GetFrame(curFrameIdx);
         var frame = CurFrameInput;
-        for (int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++)
+        {
             allPlayers[i].InputAgent = frame.inputs[i];
         }
     }
 
 
-    private void Replay(int frameIdx){
+    private void Replay(int frameIdx)
+    {
         _Update();
     }
 
-    private void _Update(){
+    private void _Update()
+    {
         var deltaTime = new LFloat(true, 30);
         collisionManager.DoUpdate(deltaTime);
         DoUpdate(deltaTime);
-        foreach (var mgr in _mgrs) {
+        foreach (var mgr in _mgrs)
+        {
             mgr.DoUpdate(deltaTime);
         }
     }
 
 
-    private void OnDestroy(){
+    private void OnDestroy()
+    {
         netClient?.Send(new Msg_QuitRoom());
-        foreach (var mgr in _mgrs) {
+        foreach (var mgr in _mgrs)
+        {
             mgr.DoDestroy();
         }
 
-        if (!IsReplay) {
+        if (!IsReplay)
+        {
             RecordHelper.Serialize(recordFilePath, this);
         }
 
@@ -295,13 +342,15 @@ public class GameManager : BaseManager {
         DoDestroy();
     }
 
-    public override void DoAwake(){
-    
+    public override void DoAwake()
+    {
         Instance = this;
         EnemyManager.maxCount = maxEnemyCount;
         var mgrs = GetComponents<BaseManager>();
-        foreach (var mgr in mgrs) {
-            if (mgr != this) {
+        foreach (var mgr in mgrs)
+        {
+            if (mgr != this)
+            {
                 RegisterManagers(mgr);
             }
         }
@@ -315,17 +364,22 @@ public class GameManager : BaseManager {
         collisionManager.DoAwake();
     }
 
-    public override void DoStart(){
+    public override void DoStart()
+    {
         InputManager.IsReplay = IsReplay;
-        if (IsReplay) {
+        if (IsReplay)
+        {
             RecordHelper.Deserialize(recordFilePath, this);
         }
     }
 
 
-    public override void DoUpdate(LFloat deltaTime){ }
+    public override void DoUpdate(LFloat deltaTime)
+    {
+    }
 
-    public override void DoDestroy(){
+    public override void DoDestroy()
+    {
         //DumpPathFindReqs();
     }
 }
