@@ -9,6 +9,8 @@ namespace Lockstep.Logic {
         public CAnimatorView Init(BaseEntity entity){
             unityTransform = entity.GetUnityTransform();
             anim = unityTransform.GetComponent<Animator>();
+            
+            Debug.LogError($"unityTransform "+unityTransform+" anim "+anim);
             return this;
         }
 

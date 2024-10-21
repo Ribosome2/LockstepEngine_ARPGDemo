@@ -40,7 +40,7 @@ namespace Lockstep.Logic {
         [Header("BaseComponents")] public EntityAttri entityAttri = new EntityAttri();
         public CRigidbody rigidbody = new CRigidbody();
         public CTransform2D transform = new CTransform2D();
-        public CAnimation animator = new CAnimation();
+        public CAnimation animator ;
         public int EntityId;
 
         public int PrefabId;

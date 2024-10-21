@@ -25,7 +25,7 @@ namespace Lockstep.Logic {
         }
 
         public void Spawn(){
-            OnSpawnEvent(prefabId, spawnPoint);
+            // OnSpawnEvent(prefabId, spawnPoint);
         }
     }
 }
