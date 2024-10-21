@@ -135,6 +135,7 @@ namespace Lockstep.FakeServer
             }
 
             //hash不一样只是输出个log，所以这条协议只是用来调试的？
+            //发现不一样，那就调试，看看哪里逻辑不符合帧同步，这里应该不是用来检查作弊的，只是用来检测代码是否有bug?
             if (!isSame)
             {
                 Debug.Log(msg.tick + " Hash is different " + val);

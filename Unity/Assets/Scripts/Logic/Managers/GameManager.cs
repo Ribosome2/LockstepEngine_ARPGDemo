@@ -11,6 +11,7 @@ using Lockstep.Math;
 using Lockstep.Serialization;
 using Lockstep.Util;
 using UnityEngine;
+using UnityEngine.UI;
 using Debug = Lockstep.Logging.Debug;
 using Profiler = Lockstep.Util.Profiler;
 
@@ -52,6 +53,7 @@ public class GameManager : BaseManager
     private List<BaseManager> _mgrs = new List<BaseManager>();
 
     public NetClient netClient;
+    public Toggle toggleSendInput;
 
     private static string _traceLogPath
     {
@@ -147,6 +149,12 @@ public class GameManager : BaseManager
 
     public void SendInput()
     {
+        //用来测试后端处理某些客户端没有发协议上来的情况
+        if (toggleSendInput.isOn == false)
+        {
+            return;
+        }
+        
         predictTickCount = 2; //Mathf.Clamp(Mathf.CeilToInt(pingVal / 30), 1, 20);
         if (inputTick > predictTickCount + maxServerFrameIdx)
         {

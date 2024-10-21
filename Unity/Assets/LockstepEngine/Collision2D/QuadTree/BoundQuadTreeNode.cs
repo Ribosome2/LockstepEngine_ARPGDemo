@@ -17,7 +17,7 @@ namespace Lockstep.Collision2D {
 // Copyright 2014 Nition, BSD licence (see LICENCE file). www.momentstudio.co.nz
     public partial class BoundsQuadTreeNode {
         public BoundsQuadTreeNode parent;
-#if SHOW_NODES
+#if SHOW_NODES && UNITY_EDITOR
         public Transform monoTrans;
 #endif
         // Centre of this node

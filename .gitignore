@@ -82,3 +82,4 @@ ModelManifest.xml
 #Backup file  
 *.bak
 Unity/UserSettings/
+PCBuild
