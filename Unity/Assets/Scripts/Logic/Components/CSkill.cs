@@ -71,11 +71,11 @@ namespace Lockstep.Logic {
 
         public void OnFire(){
             owner.isInvincible = true;
-            owner.isFire = true;
+            owner.isFiringSkill = true;
         }
 
         public void Done(){
-            owner.isFire = false;
+            owner.isFiringSkill = false;
             owner.isInvincible = false;
             state = ESkillState.Idle;
             owner.animator?.Play(AnimDefine.Idle);

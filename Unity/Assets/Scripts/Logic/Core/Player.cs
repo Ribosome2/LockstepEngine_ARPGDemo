@@ -37,14 +37,14 @@ namespace Lockstep.Logic {
             // }
 
             var skillId = InputAgent.skillId;
-            if (skillId >= 0 && !isFire) {
+            if (skillId >= 0 && !isFiringSkill) {
                 if (skillId < this.allSkills.Count) {
                     allSkills[skillId].Fire();
                 }
             }
 
             base.DoUpdate(deltaTime);
-            if (!isFire) {
+            if (!isFiringSkill) {
                 eventHandler.Animating(CMover.hasReachTarget);
             }
             animator.DoLateUpdate(deltaTime);

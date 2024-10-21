@@ -4,6 +4,7 @@ using System.Linq;
 using Lockstep.Collision2D;
 using Lockstep.Math;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
@@ -49,7 +50,7 @@ namespace Lockstep.Logic {
         public int startingHealth = 100;
         public int currentHealth;
         public bool isInvincible;
-        public bool isFire;
+        [FormerlySerializedAs("isFire")] public bool isFiringSkill;
         public LFloat speed = new LFloat(5);
         public Action<int, LVector3> OnBeAtked;
 
