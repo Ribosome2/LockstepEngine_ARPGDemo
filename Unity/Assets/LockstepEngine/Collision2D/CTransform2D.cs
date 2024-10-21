@@ -9,6 +9,8 @@ namespace Lockstep.Collision2D {
     public class CTransform2D {
         public LVector2 pos;
         public LFloat y;
+        
+        //这是degree的缩写？ 也就是
         public LFloat deg; //same as Unity CW deg(up) =0
 
         public LVector2 forward {//等同于2D  up

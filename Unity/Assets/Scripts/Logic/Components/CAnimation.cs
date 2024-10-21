@@ -73,7 +73,7 @@ public class CAnimation : MonoBehaviour, IView {
         if (owner!=null)
         {
             Debug.Trace($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
-            UnityEngine.Debug.Log($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
+            // UnityEngine.Debug.Log($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
         }
         var hasChangedAnim = CurAnimName != name;
         CurAnimName = name;

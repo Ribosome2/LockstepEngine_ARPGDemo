@@ -30,11 +30,11 @@ namespace Lockstep.Logic {
 
             spdUpTimer -= deltaTime;
             speed = spdUpTimer > 0 ? fastSpd : normalSpd;
-            if (spdUpTimer > 0) {
-                PostEffectManager.StartEffect(EPostEffectType.RadialBlur, 0.1f, 0.2f,
-                    0.3f
-                    , new PostEffectRadialBlur.ParamsInfo(1, 1.5f));
-            }
+            // if (spdUpTimer > 0) {
+            //     PostEffectManager.StartEffect(EPostEffectType.RadialBlur, 0.1f, 0.2f,
+            //         0.3f
+            //         , new PostEffectRadialBlur.ParamsInfo(1, 1.5f));
+            // }
 
             var skillId = InputAgent.skillId;
             if (skillId >= 0 && !isFire) {
