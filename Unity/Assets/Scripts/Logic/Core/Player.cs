@@ -38,7 +38,8 @@ namespace Lockstep.Logic {
 
             var skillId = InputAgent.skillId;
             if (skillId >= 0 && !isFiringSkill) {
-                if (skillId < this.allSkills.Count) {
+                if (skillId < this.allSkills.Count) 
+                {
                     allSkills[skillId].Fire();
                 }
             }
