@@ -162,7 +162,7 @@ namespace Lockstep.PathFinding {
                     AddTriangle(lTris,lVerts[0], lVerts[1], lVerts[2], tri);
                 }
                 else {
-                    Debug.Assert(lVerts.Count == 4);
+                    LSDebug.Assert(lVerts.Count == 4);
                     AddTriangle(lTris,lVerts[0], lVerts[1], lVerts[2], tri);
                     AddTriangle(lTris,lVerts[0], lVerts[2], lVerts[3], tri);
                 }
@@ -173,7 +173,7 @@ namespace Lockstep.PathFinding {
                     AddTriangle(rTris,rVerts[0], rVerts[1], rVerts[2], tri);
                 }
                 else {
-                    Debug.Assert(rVerts.Count == 4);
+                    LSDebug.Assert(rVerts.Count == 4);
                     AddTriangle(rTris,rVerts[0], rVerts[1], rVerts[2], tri);
                     AddTriangle(rTris,rVerts[0], rVerts[2], rVerts[3], tri);
                 }

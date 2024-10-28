@@ -40,7 +40,7 @@ namespace Lockstep.BehaviourTree{
                 sb.AppendLine($"{{ typeof({type.Name}),{idx--.ToString()} }},");
             }
 
-            Debug.LogError(sb.ToString());
+            LSDebug.LogError(sb.ToString());
             return;
         }
     }

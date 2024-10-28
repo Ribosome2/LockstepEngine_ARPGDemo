@@ -25,11 +25,11 @@ namespace Lockstep.Util {
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.WorkingDirectory = workingDir;
             process.Start();
-            Debug.Log($"ExeCmd {process.StartInfo.FileName} {shellName}    ##workingDir={process.StartInfo.WorkingDirectory} ");
+            LSDebug.Log($"ExeCmd {process.StartInfo.FileName} {shellName}    ##workingDir={process.StartInfo.WorkingDirectory} ");
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
             process.Close();
-            Debug.Log(output);
+            LSDebug.Log(output);
         }
     }
 }

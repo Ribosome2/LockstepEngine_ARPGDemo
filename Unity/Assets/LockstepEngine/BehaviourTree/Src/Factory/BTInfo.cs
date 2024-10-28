@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Lockstep.Logging;
 using Lockstep.Serialization;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.BehaviourTree {
     [ExtFormat]
@@ -68,7 +68,7 @@ namespace Lockstep.BehaviourTree {
         BTNode DeserializeNode(Deserializer reader, FuncCreateNode funcCreate){
             var id = reader.ReadInt16();
             var node = funcCreate(id);
-            if(node == null) Debug.LogError(id.ToString());
+            if(node == null) LSDebug.LogError(id.ToString());
             node.Deserialize(reader);
             var hasPrecondition = reader.ReadBoolean();
             if (hasPrecondition) {

@@ -87,7 +87,7 @@ namespace Lockstep.Util {
                         OnTickPerSeconds.Invoke(CurrentTick);
                 }
                 catch (Exception e) {
-                    Debug.LogError(e);
+                    LSDebug.LogError(e);
                 }
             }
         }

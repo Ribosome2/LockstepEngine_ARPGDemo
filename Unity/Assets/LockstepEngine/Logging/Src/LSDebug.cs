@@ -5,7 +5,7 @@ using System.Text;
 using Lockstep.Logic;
 
 namespace Lockstep.Logging {
-    public class Debug {
+    public class LSDebug {
         public static string prefix = "";
         static StringBuilder _traceSb = new StringBuilder();
         public static string TraceSavePath;

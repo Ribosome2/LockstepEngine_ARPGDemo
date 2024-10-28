@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using Lockstep.Logging;
 using Lockstep.Math;
 using UnityEngine;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
     public class EnemyManager : BaseManager {
@@ -55,7 +55,7 @@ namespace Lockstep.Logic {
         public static BaseEntity InstantiateEntity(int prefabId, LVector3 position){
             var prefab = ResourceManager.LoadPrefab(prefabId);
             object config = ResourceManager.Instance.GetEnemyConfig(prefabId);
-            Debug.Trace("CreateEnemy");
+            LSDebug.Trace("CreateEnemy");
             var entity = new Enemy();
             var obj = EntityView.CreateEntity(entity, prefabId, position, prefab, config);
             entity.nav = obj.GetComponent<NavMeshAgentMono>();

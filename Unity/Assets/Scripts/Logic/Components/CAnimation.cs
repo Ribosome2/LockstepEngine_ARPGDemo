@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Lockstep.Logic;
 using Lockstep.Collision2D;
+using Lockstep.Logging;
 using Lockstep.Math;
 using UnityEngine;
-using Debug = Lockstep.Logging.Debug;
 
-public class CAnimation : MonoBehaviour, IView {
+public class CAnimation : MonoBehaviour, IView
+{
     [Header("shaderDebug")] public float shaderDuration;
     public float shaderFadeInTime;
     public float shaderFadeOutTime;
@@ -14,9 +15,8 @@ public class CAnimation : MonoBehaviour, IView {
     public float shadersSampleStrength;
 
     public bool useAnimator = false;
-    
-    [Header("Comps")] 
-    public Animation animComp;
+
+    [Header("Comps")] public Animation animComp;
     public Animator animatorComp;
     public Transform rootTrans;
     public AnimatorConfig config;
@@ -36,20 +36,24 @@ public class CAnimation : MonoBehaviour, IView {
     public LFloat debugTimer = LFloat.zero;
 
 
-    void Start(){
+    void Start()
+    {
         if (useAnimator == false)
         {
-            if (animComp == null) {
+            if (animComp == null)
+            {
                 animComp = GetComponent<Animation>();
-                if (animComp == null) {
+                if (animComp == null)
+                {
                     animComp = GetComponentInChildren<Animation>();
                 }
             }
         }
-       
+
 
         animNames.Clear();
-        foreach (var info in animInfos) {
+        foreach (var info in animInfos)
+        {
             animNames.Add(info.name);
         }
 
@@ -57,24 +61,29 @@ public class CAnimation : MonoBehaviour, IView {
         Play(AnimDefine.Idle);
     }
 
-    public void SetTrigger(string name, bool isCrossfade = false){
+    public void SetTrigger(string name, bool isCrossfade = false)
+    {
         Play(name, isCrossfade); //TODO
     }
 
-    public void Play(string name, bool isCrossfade = false){
+    public void Play(string name, bool isCrossfade = false)
+    {
         if (CurAnimName == name)
             return;
+        Debug.Log("Play Animation ----- " + name);
         var idx = animNames.IndexOf(name);
-        if (idx == -1) {
+        if (idx == -1)
+        {
             UnityEngine.Debug.LogError("miss animation " + name);
             return;
         }
 
-        if (owner!=null)
+        if (owner != null)
         {
-            Debug.Trace($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
+            LSDebug.Trace($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
             // UnityEngine.Debug.Log($"{owner.EntityId} PlayAnim {name} rawName {CurAnimName}");
         }
+
         var hasChangedAnim = CurAnimName != name;
         CurAnimName = name;
         if (useAnimator)
@@ -85,10 +94,12 @@ public class CAnimation : MonoBehaviour, IView {
         {
             animState = animComp[CurAnimName];
         }
+
         CurAnimInfo = animInfos[idx];
         CurAnimBindInfo = config.events.Find((a) => a.name == name);
         if (CurAnimBindInfo == null) CurAnimBindInfo = AnimBindInfo.Empty;
-        if (hasChangedAnim) {
+        if (hasChangedAnim)
+        {
             //owner.TakeDamage(0, owner.transform2D.Pos3);
             ResetAnim();
         }
@@ -100,21 +111,35 @@ public class CAnimation : MonoBehaviour, IView {
     {
         if (useAnimator)
         {
-            if (isCrossfade) {
-                animatorComp.CrossFade(CurAnimName,0.3f);
+            if (isCrossfade)
+            {
+                animatorComp.CrossFade(CurAnimName, 0.3f);
             }
-            else {
-                animatorComp.Play(CurAnimName);
+            else
+            {
+                
+                animatorComp.SetBool(AnimDefine.Idle,false);
+                animatorComp.SetBool(AnimDefine.AtkNormal01,false);
+                animatorComp.SetBool(AnimDefine.Run,false);
+                animatorComp.SetBool(AnimDefine.Walk,false);
+                animatorComp.SetBool(AnimDefine.AtkSkill01,false);
+                animatorComp.SetBool(AnimDefine.AtkSkill02,false);
+                
+                // animatorComp.Play(CurAnimName);
+                animatorComp.SetBool(CurAnimName,true);
             }
         }
         else
         {
             var state = animComp[CurAnimName];
-            if (state != null) {
-                if (isCrossfade) {
+            if (state != null)
+            {
+                if (isCrossfade)
+                {
                     animComp.CrossFade(CurAnimName);
                 }
-                else {
+                else
+                {
                     animComp.Play(CurAnimName);
                 }
             }
@@ -127,16 +152,18 @@ public class CAnimation : MonoBehaviour, IView {
 
     private BaseEntity owner;
 
-    public void BindEntity(BaseEntity entity){
+    public void BindEntity(BaseEntity entity)
+    {
         owner = entity;
     }
 
-    public void SetTime(LFloat timer){
-        if (owner!=null)
+    public void SetTime(LFloat timer)
+    {
+        if (owner != null)
         {
             var idx = GetTimeIdx(timer);
             intiPos = owner.transform.Pos3 - CurAnimInfo[idx].pos;
-            Debug.Trace(
+            LSDebug.Trace(
                 $"{owner.EntityId} SetTime  idx:{idx} intiPos {owner.transform.Pos3}",
                 true);
         }
@@ -144,34 +171,42 @@ public class CAnimation : MonoBehaviour, IView {
         this.timer = timer;
     }
 
-    public void LateUpdate(){
-        if (CurAnimBindInfo != null && CurAnimBindInfo.isMoveByAnim) {
+    public void LateUpdate()
+    {
+        if (CurAnimBindInfo != null && CurAnimBindInfo.isMoveByAnim)
+        {
             rootTrans.localPosition = Vector3.zero;
         }
     }
 
-    public void DoLateUpdate(LFloat deltaTime){
+    public void DoLateUpdate(LFloat deltaTime)
+    {
         animLen = CurAnimInfo.length;
         timer += deltaTime;
-        if (timer > animLen) {
+        if (timer > animLen)
+        {
             ResetAnim();
         }
 
-        if (!Application.isPlaying) {
+        if (!Application.isPlaying)
+        {
             Sample(timer);
         }
 
         UpdateTrans();
     }
 
-    void ResetAnim(){
+    void ResetAnim()
+    {
         timer = LFloat.zero;
         SetTime(LFloat.zero);
     }
 
-    public void Sample(LFloat time){
-        if(animState == null) return;
-        if (!Application.isPlaying) {
+    public void Sample(LFloat time)
+    {
+        if (animState == null) return;
+        if (!Application.isPlaying)
+        {
             animComp.Play();
         }
 
@@ -179,15 +214,18 @@ public class CAnimation : MonoBehaviour, IView {
         animState.weight = 1;
         animState.time = time.ToFloat();
         animComp.Sample();
-        if (!Application.isPlaying) {
+        if (!Application.isPlaying)
+        {
             animState.enabled = false;
         }
     }
 
 
-    private void UpdateTrans(){
+    private void UpdateTrans()
+    {
         var idx = GetTimeIdx(timer);
-        if (CurAnimBindInfo.isMoveByAnim) {
+        if (CurAnimBindInfo.isMoveByAnim)
+        {
             var animOffset = CurAnimInfo[idx].pos;
             var pos = owner.transform.TransformDirection(animOffset.ToLVector2XZ());
             owner.transform.Pos3 = (intiPos + pos.ToLVector3XZ(animOffset.y));
@@ -196,8 +234,9 @@ public class CAnimation : MonoBehaviour, IView {
     }
 
 
-    int GetTimeIdx(LFloat timer){
-        var idx = (int) (timer / AnimatorConfig.FrameInterval);
+    int GetTimeIdx(LFloat timer)
+    {
+        var idx = (int)(timer / AnimatorConfig.FrameInterval);
         idx = Math.Min(CurAnimInfo.OffsetCount - 1, idx);
         return idx;
     }

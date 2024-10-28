@@ -26,7 +26,7 @@ public class TraceHelper {
             DumpEntity(entity);
         }
 
-        Debug.Trace(dumpSb.ToString(), true);
+        LSDebug.Trace(dumpSb.ToString(), true);
         dumpSb.Clear();
     }
 

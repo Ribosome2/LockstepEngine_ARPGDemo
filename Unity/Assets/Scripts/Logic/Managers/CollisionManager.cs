@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Lockstep.Logic;
 using Lockstep.Collision2D;
+using Lockstep.Logging;
 using Lockstep.Math;
 using Lockstep.UnsafeCollision2D;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Object = UnityEngine.Object;
 using Ray2D = Lockstep.Collision2D.Ray2D;
-using Debug = Lockstep.Logging.Debug;
 
 public class CollisionManager : MonoBehaviour {
     private static CollisionManager _instance;
@@ -55,7 +55,7 @@ public class CollisionManager : MonoBehaviour {
 
     public void DoStart(){
         if (_instance != this) {
-            Debug.LogError("Duplicate CollisionSystemAdapt!");
+            LSDebug.LogError("Duplicate CollisionSystemAdapt!");
             return;
         }
 
@@ -65,7 +65,7 @@ public class CollisionManager : MonoBehaviour {
             minNodeSize = minNodeSize,
             loosenessval = loosenessval
         };
-        Debug.Trace($"worldSize:{worldSize} pos:{pos} minNodeSize:{minNodeSize} loosenessval:{loosenessval}");
+        LSDebug.Trace($"worldSize:{worldSize} pos:{pos} minNodeSize:{minNodeSize} loosenessval:{loosenessval}");
         this.collisionSystem = collisionSystem;
         collisionSystem.DoStart(InterestingMasks, allTypes);
         collisionSystem.funcGlobalOnTriggerEvent += GlobalOnTriggerEvent;

@@ -29,7 +29,7 @@ namespace Lockstep.Collision2D {
                 }
             }
 
-            Debug.LogError("No support type" + type);
+            LSDebug.LogError("No support type" + type);
 
             return new LRect();
         }

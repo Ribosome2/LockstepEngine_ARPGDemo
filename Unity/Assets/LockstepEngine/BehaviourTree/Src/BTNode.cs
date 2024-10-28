@@ -115,7 +115,7 @@ namespace Lockstep.BehaviourTree {
 
         public BTNode AddChild(BTNode node){
             if (_maxChildCount >= 0 && _children.Count >= _maxChildCount) {
-                Logging.Debug.LogError("**BT** exceeding child count");
+                Logging.LSDebug.LogError("**BT** exceeding child count");
                 return this;
             }
 
@@ -133,7 +133,7 @@ namespace Lockstep.BehaviourTree {
         public void InsertChild(BTNode PreNode, BTNode node, bool back = false){
 #if DEBUG
             if (IsParentNode(node)) {
-                Debug.LogError("Can not make parent as it's child ");
+                LSDebug.LogError("Can not make parent as it's child ");
                 return;
             }
 #endif
@@ -158,7 +158,7 @@ namespace Lockstep.BehaviourTree {
         public void ReplaceChild(BTNode PreNode, BTNode node){
 #if DEBUG
             if (IsParentNode(node)) {
-                Debug.LogError("Can not make parent as it's child ");
+                LSDebug.LogError("Can not make parent as it's child ");
                 return;
             }
 #endif
@@ -212,7 +212,7 @@ namespace Lockstep.BehaviourTree {
             var offsets = new int[nodes.Count];
 
             for (int i = 0; i < nodes.Count; i++) {
-                Debug.Assert(nodes[i]._uniqueKey == i, "Error: Idx not match");
+                LSDebug.Assert(nodes[i]._uniqueKey == i, "Error: Idx not match");
             }
 
             var offset = 0;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Lockstep.Math;
 using Lockstep.Util;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.PathFinding {
     public class TriangleNavMesh : NavMesh {

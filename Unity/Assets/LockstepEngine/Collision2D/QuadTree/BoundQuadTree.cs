@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Lockstep.Logging;
 using Lockstep.Math;
 using Lockstep.UnsafeCollision2D;
-using Debug = Lockstep.Logging.Debug;
 #if UNITY_EDITOR
 using UnityEngine;
 #endif
@@ -79,7 +78,7 @@ namespace Lockstep.Collision2D {
         /// <param name="loosenessVal">Clamped between 1 and 2. Values > 1 let nodes overlap.</param>
         public BoundsQuadTree(LFloat initialWorldSize, LVector2 initialWorldPos, LFloat minNodeSize, LFloat loosenessVal){
             if (minNodeSize > initialWorldSize) {
-                Debug.Log("Minimum node size must be at least as big as the initial world size. Was: " +
+                LSDebug.Log("Minimum node size must be at least as big as the initial world size. Was: " +
                                  minNodeSize + " Adjusted to: " + initialWorldSize);
                 minNodeSize = initialWorldSize;
             }
@@ -92,7 +91,7 @@ namespace Lockstep.Collision2D {
         }
 
         public void UpdateObj(ColliderProxy obj, LRect bound){
-            Debug.Trace($"ColliderProxy UpdateObj { obj.Id} objBounds  {bound}");
+            LSDebug.Trace($"ColliderProxy UpdateObj { obj.Id} objBounds  {bound}");
             var node = GetNode(obj);
             if (node == null) {
                 Add(obj, bound);
@@ -125,14 +124,14 @@ namespace Lockstep.Collision2D {
         /// <param name="obj">Object to add.</param>
         /// <param name="objBounds">3D bounding box around the object.</param>
         public void Add(ColliderProxy obj, LRect objBounds){
-            Debug.Trace($"ColliderProxy Add { obj.Id} objBounds  {objBounds}");
+            LSDebug.Trace($"ColliderProxy Add { obj.Id} objBounds  {objBounds}");
             // Add object or expand the octree until it can be added
             int count = 0; // Safety check against infinite/excessive growth
             while (!rootNode.Add(obj, objBounds)) {
-                Debug.LogError("Grow");
+                LSDebug.LogError("Grow");
                 Grow(objBounds.center - rootNode.Center);
                 if (++count > 20) {
-                    Debug.LogError("Aborted Add operation as it seemed to be going on forever (" + (count - 1) +
+                    LSDebug.LogError("Aborted Add operation as it seemed to be going on forever (" + (count - 1) +
                                    ") attempts at growing the octree.");
                     return;
                 }
@@ -147,7 +146,7 @@ namespace Lockstep.Collision2D {
         /// <param name="obj">Object to remove.</param>
         /// <returns>True if the object was removed successfully.</returns>
         public bool Remove(ColliderProxy obj){
-            Debug.Trace($"ColliderProxy Remove { obj.Id} ");
+            LSDebug.Trace($"ColliderProxy Remove { obj.Id} ");
             bool removed = rootNode.Remove(obj);
 
             // See if we can shrink the octree down now that we've removed the item
@@ -166,7 +165,7 @@ namespace Lockstep.Collision2D {
         /// <param name="objBounds">3D bounding box around the object.</param>
         /// <returns>True if the object was removed successfully.</returns>
         public bool Remove(ColliderProxy obj, LRect objBounds){
-            Debug.Trace($"ColliderProxy Add { obj.Id} objBounds  {objBounds}");
+            LSDebug.Trace($"ColliderProxy Add { obj.Id} objBounds  {objBounds}");
             bool removed = rootNode.Remove(obj, objBounds);
 
             // See if we can shrink the octree down now that we've removed the item
@@ -249,7 +248,7 @@ namespace Lockstep.Collision2D {
         /// </summary>
         /// <param name="direction">Direction to grow.</param>
         void Grow(LVector2 direction){
-            Debug.Trace("Grow");
+            LSDebug.Trace("Grow");
             int xDirection = direction.x >= 0 ? 1 : -1;
             int yDirection = direction.y >= 0 ? 1 : -1;
             BoundsQuadTreeNode oldRoot = rootNode;
@@ -285,7 +284,7 @@ namespace Lockstep.Collision2D {
         /// Shrink the octree if possible, else leave it the same.
         /// </summary>
         void Shrink(){
-            Debug.Trace("Shrink");
+            LSDebug.Trace("Shrink");
             rootNode = rootNode.ShrinkIfPossible(initialSize);
         }
     }

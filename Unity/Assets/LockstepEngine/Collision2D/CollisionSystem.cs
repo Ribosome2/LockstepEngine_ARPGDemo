@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Lockstep.Logging;
 using Lockstep.Math;
 using Lockstep.UnsafeCollision2D;
 using Lockstep.Util;
 using Random = System.Random;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Collision2D {
     public delegate void FuncGlobalOnTriggerEvent(ColliderProxy a, ColliderProxy b, ECollisionEvent type);
@@ -76,7 +76,7 @@ namespace Lockstep.Collision2D {
         }
 
         public void QueryRegion(int layerType, LVector2 pos, LVector2 size, LVector2 forward, FuncCollision callback){
-            Debug.Trace($"QueryRegion layerType:{layerType} pos:{pos} size:{size}  forward:{forward} ");
+            LSDebug.Trace($"QueryRegion layerType:{layerType} pos:{pos} size:{size}  forward:{forward} ");
             tempCallback = callback;
             _tempSize = size;
             _tempForward = forward;
@@ -87,7 +87,7 @@ namespace Lockstep.Collision2D {
         }
 
         public void QueryRegion(int layerType, LVector2 pos, LFloat radius, FuncCollision callback){
-            Debug.Trace($"QueryRegion layerType:{layerType} pos:{pos} radius:{radius} ");
+            LSDebug.Trace($"QueryRegion layerType:{layerType} pos:{pos} radius:{radius} ");
             tempCallback = callback;
             _tempPos = pos;
             _tempRadius = radius;
@@ -102,14 +102,14 @@ namespace Lockstep.Collision2D {
         private LFloat _tempRadius;
 
         private void _CheckRegionOBB(ColliderProxy obj){
-            Debug.Trace($"ColliderProxy _CheckRegionOBB {obj.Id} trans{obj.Transform2D} col{obj.Prefab}");
+            LSDebug.Trace($"ColliderProxy _CheckRegionOBB {obj.Id} trans{obj.Transform2D} col{obj.Prefab}");
             if (CollisionHelper.CheckCollision(obj.Prefab, obj.Transform2D, _tempPos, _tempSize, _tempForward)) {
                 tempCallback(obj);
             }
         }
 
         private void _CheckRegionCircle(ColliderProxy obj){
-            Debug.Trace($"ColliderProxy _CheckRegionCircle {obj.Id} trans{obj.Transform2D} col{obj.Prefab}");
+            LSDebug.Trace($"ColliderProxy _CheckRegionCircle {obj.Id} trans{obj.Transform2D} col{obj.Prefab}");
             if (CollisionHelper.CheckCollision(obj.Prefab, obj.Transform2D, _tempPos, _tempRadius)) {
                 tempCallback(obj);
             }

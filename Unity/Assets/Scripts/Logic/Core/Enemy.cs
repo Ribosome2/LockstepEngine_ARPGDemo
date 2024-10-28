@@ -1,6 +1,6 @@
 using Lockstep.Collision2D;
+using Lockstep.Logging;
 using Lockstep.Math;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
     public class Enemy : BaseEntity {
@@ -52,7 +52,7 @@ namespace Lockstep.Logic {
             if (timer >= timeBetweenAttacks && playerInRange && currentHealth > 0) {
                 timer = LFloat.zero;
                 if (player.currentHealth > 0) {
-                    Debug.Trace($"{EntityId}Atk{player.EntityId}");
+                    LSDebug.Trace($"{EntityId}Atk{player.EntityId}");
                     player.TakeDamage(attackDamage, player.transform.Pos3);
                 }
             }
@@ -83,14 +83,14 @@ namespace Lockstep.Logic {
         }
 
         public override void OnLPTriggerEnter(ColliderProxy other){
-            Debug.Trace($"{EntityId} OnLPTriggerEnter {other.Entity.EntityId}");
+            LSDebug.Trace($"{EntityId} OnLPTriggerEnter {other.Entity.EntityId}");
             playerInRange = true;
         }
 
         public override void OnLPTriggerStay(ColliderProxy other){ }
 
         public override void OnLPTriggerExit(ColliderProxy other){
-            Debug.Trace($"{EntityId} OnLPTriggerExit {other.Entity.EntityId}");
+            LSDebug.Trace($"{EntityId} OnLPTriggerExit {other.Entity.EntityId}");
             playerInRange = false;
         }
     }

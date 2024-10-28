@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Debug = Lockstep.Logging.Debug;
 
 public class FloatBarManager : MonoBehaviour {
     private static FloatBarManager _Instance;

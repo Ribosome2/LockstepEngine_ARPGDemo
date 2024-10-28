@@ -7,12 +7,12 @@ using Lockstep.Logic;
 using Lockstep.PathFinding;
 using Lockstep.FakeServer;
 using Lockstep.Game;
+using Lockstep.Logging;
 using Lockstep.Math;
 using Lockstep.Serialization;
 using Lockstep.Util;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = Lockstep.Logging.Debug;
 using Profiler = Lockstep.Util.Profiler;
 
 public class GameManager : BaseManager
@@ -106,7 +106,7 @@ public class GameManager : BaseManager
             mgr.DoStart();
         }
 
-        Debug.Trace("Before StartGame _IdCounter" + BaseEntity._IdCounter);
+        LSDebug.Trace("Before StartGame _IdCounter" + BaseEntity._IdCounter);
         if (!IsReplay)
         {
             netClient = new NetClient();
@@ -192,11 +192,11 @@ public class GameManager : BaseManager
         this.playerCount = playerInfos.Length;
         this.playerServerInfos = playerInfos;
         this.localPlayerId = localPlayerId;
-        Debug.TraceSavePath = _traceLogPath;
+        LSDebug.TraceSavePath = _traceLogPath;
         allPlayers.Clear();
         for (int i = 0; i < playerCount; i++)
         {
-            Debug.Trace("CreatePlayer");
+            LSDebug.Trace("CreatePlayer");
             allPlayers.Add(new Player() { localId = i });
         }
 
@@ -346,7 +346,7 @@ public class GameManager : BaseManager
             RecordHelper.Serialize(recordFilePath, this);
         }
 
-        Debug.FlushTrace();
+        LSDebug.FlushTrace();
         DoDestroy();
     }
 

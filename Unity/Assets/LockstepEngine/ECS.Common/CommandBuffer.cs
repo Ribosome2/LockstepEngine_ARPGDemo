@@ -46,7 +46,7 @@ namespace Lockstep.Game {
 
         ///RevertTo tick , so all cmd between [tick,~)(Include tick) should undo
         public void Jump(int curTick, int dstTick){
-            Debug.Assert(curTick > dstTick, $"Not video mode should not roll forward curTick{curTick} dstTick{dstTick}");
+            LSDebug.Assert(curTick > dstTick, $"Not video mode should not roll forward curTick{curTick} dstTick{dstTick}");
             if (_tail == null || _tail.Tick < dstTick) {
                 return;
             }
@@ -56,9 +56,9 @@ namespace Lockstep.Game {
                 newTail = newTail.pre;
             }
 
-            Debug.Assert(newTail.Tick >= dstTick,
+            LSDebug.Assert(newTail.Tick >= dstTick,
                 $"newTail must be the first cmd executed after that tick : tick:{dstTick}  newTail.Tick:{newTail.Tick}");
-            Debug.Assert(newTail.pre == null
+            LSDebug.Assert(newTail.pre == null
                          || newTail.pre.Tick < dstTick,
                 $"newTail must be the first cmd executed in that tick : tick:{dstTick}  " +
                 $"newTail.pre.Tick:{newTail.pre?.Tick ?? dstTick}");

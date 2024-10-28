@@ -43,7 +43,7 @@ namespace Lockstep.PathFinding {
 
             _numConnectedEdges /= 2;
             _numTotalEdges = _numConnectedEdges + _numDisconnectedEdges;
-            Debug.Log(
+            LSDebug.Log(
                 $"mapId{navMeshData.getMapID()} triangles{getTriangleCont()} totalEdges{_numTotalEdges} connEdges{_numConnectedEdges} disConnEdges{_numDisconnectedEdges}");
         }
 
@@ -126,7 +126,7 @@ namespace Lockstep.PathFinding {
                 }
             }
 
-            Debug.Log($"连接个数：{indexConnections.Count}");
+            LSDebug.Log($"连接个数：{indexConnections.Count}");
             return indexConnections;
         }
 
@@ -179,7 +179,7 @@ namespace Lockstep.PathFinding {
                 var edge = new TriangleEdge(fromNode, toNode, edgeVertexA, edgeVertexB);
                 connectionMap.get(fromNode).Add(edge);
                 fromNode.connections.Add(edge);
-                Debug.LogFormat( $"Triangle：{fromNode.getIndex()} -->{toNode.getIndex()} {fromNode}-->{toNode}");
+                LSDebug.LogFormat( $"Triangle：{fromNode.getIndex()} -->{toNode.getIndex()} {fromNode}-->{toNode}");
             }
 
             return connectionMap;
@@ -308,7 +308,7 @@ namespace Lockstep.PathFinding {
 
                 int totalEdges = (connectedEdges.Count + disconnectedEdges.Count);
                 if (totalEdges != 3) {
-                    Debug.LogError("Wrong number of edges (" + totalEdges + ") in triangle " +
+                    LSDebug.LogError("Wrong number of edges (" + totalEdges + ") in triangle " +
                                                tri.getIndex());
                 }
             }

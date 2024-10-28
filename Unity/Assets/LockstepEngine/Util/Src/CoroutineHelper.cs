@@ -115,7 +115,7 @@ namespace Lockstep.Util {
                     }
                 }
                 catch (Exception e) {
-                    Debug.LogError(e);
+                    LSDebug.LogError(e);
                 }
             }
 
@@ -145,7 +145,7 @@ namespace Lockstep.Util {
                     _runner.Update();
                 }
                 catch (Exception e) {
-                    Debug.LogError(e);
+                    LSDebug.LogError(e);
                 }
             }
         }

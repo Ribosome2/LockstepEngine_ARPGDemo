@@ -5,7 +5,6 @@
 #if UNITY_EDITOR
 using UnityEngine;
 #endif
-using Debug = Lockstep.Logging.Debug;
 
 using System;
 using System.Collections.Generic;
@@ -321,7 +320,7 @@ namespace Lockstep.Collision2D {
         /// <param name="childQuadTrees">The 8 new child nodes.</param>
         public void SetChildren(BoundsQuadTreeNode[] childQuadTrees){
             if (childQuadTrees.Length != NUM_CHILDREN) {
-                Debug.LogError("Child octree array must be length 8. Was length: " + childQuadTrees.Length);
+                LSDebug.LogError("Child octree array must be length 8. Was length: " + childQuadTrees.Length);
                 return;
             }
 
@@ -523,7 +522,7 @@ namespace Lockstep.Collision2D {
                 if (children == null) {
                     Split();
                     if (children == null) {
-                        Debug.LogError("Child creation failed for an unknown reason. Early exit.");
+                        LSDebug.LogError("Child creation failed for an unknown reason. Early exit.");
                         return;
                     }
 

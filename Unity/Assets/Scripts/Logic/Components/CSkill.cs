@@ -6,7 +6,6 @@ using Lockstep.BehaviourTree;
 using Lockstep.Collision2D;
 using Lockstep.Math;
 using UnityEngine;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
 
@@ -21,6 +20,7 @@ namespace Lockstep.Logic {
         public KeyCode fireKeyCode;
         public LFloat doneDelay;
         public int targetLayer;
+        public bool needMove=false;
         public List<SkillPart> parts = new List<SkillPart>();
 
         public enum ESkillState {
@@ -64,8 +64,12 @@ namespace Lockstep.Logic {
 
                 state = ESkillState.Firing;
                 owner.animator?.Play(animName.ToString());
-                ((Player) owner).CMover.needMove = false;
+                ((Player) owner).CMover.needMove = needMove;
                 OnFire();
+            }
+            else
+            {
+                Debug.LogError("skill cast not valid: cdTimer "+cdTimer+" state "+ state);
             }
         }
 

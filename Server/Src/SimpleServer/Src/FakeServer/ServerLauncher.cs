@@ -11,7 +11,7 @@ namespace Lockstep.FakeServer{
             // 异步方法全部会回掉到主线程
             OneThreadSynchronizationContext contex = new OneThreadSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(contex);
-            Debug.Log("Mian start");
+            Debug.Log("Server Main start");
             try {
                 DoAwake();
                 while (true) {

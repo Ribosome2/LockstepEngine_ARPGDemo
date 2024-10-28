@@ -27,7 +27,7 @@ namespace Lockstep.BehaviourTree {
 
         public unsafe void* GetContext(int idx){
             var offset = _dataOffset[idx];
-            Debug.Assert(offset >= 0 && offset < _dataLen, " out of range");
+            LSDebug.Assert(offset >= 0 && offset < _dataLen, " out of range");
             return _pDatas + offset;
         }
 

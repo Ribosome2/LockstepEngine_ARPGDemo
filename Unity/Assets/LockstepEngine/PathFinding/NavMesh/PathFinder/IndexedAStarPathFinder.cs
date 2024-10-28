@@ -30,12 +30,12 @@ namespace Lockstep.PathFinding {
 
         public bool SearchPath(N startNode, N endNode, Heuristic<N> heuristic, GraphPath<Connection<N>> outPath){
             if (startNode == null) {
-                Debug.LogError("起点坐标不在寻路层中");
+                LSDebug.LogError("起点坐标不在寻路层中");
                 return false;
             }
 
             if (endNode == null) {
-                Debug.LogError("终点坐标不在寻路层中");
+                LSDebug.LogError("终点坐标不在寻路层中");
                 return false;
             }
 

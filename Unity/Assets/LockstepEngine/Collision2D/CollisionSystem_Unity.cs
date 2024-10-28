@@ -1,16 +1,16 @@
 #if UNITY_5_3_OR_NEWER
 using System;
 using System.Collections.Generic;
+using Lockstep.Logging;
 using Lockstep.Math;
 using Lockstep.UnsafeCollision2D;
 using UnityEngine;
-using Debug = Lockstep.Logging.Debug;
 using Random = System.Random;
 
 namespace Lockstep.Collision2D {
     public partial class CollisionSystem {
         public static ColliderPrefab CreateColliderPrefab(GameObject fab){
-            Debug.Trace("CreateColliderPrefab " + fab.name);
+            LSDebug.Trace("CreateColliderPrefab " + fab.name);
 #if false
             Collider unityCollider = null;
             var colliders = fab.GetComponents<Collider>();
@@ -52,7 +52,7 @@ namespace Lockstep.Collision2D {
             CBaseShape collider = null;
             var data = fab.GetComponent<ColliderDataMono>()?.colliderData;
             if (data == null) {
-                Debug.LogError(fab.name + " Miss ColliderDataMono ");
+                LSDebug.LogError(fab.name + " Miss ColliderDataMono ");
                 return null;
             }
 
@@ -64,7 +64,7 @@ namespace Lockstep.Collision2D {
                 //obb
                 collider = new COBB(data.size, data.deg);
             }
-            Debug.Trace($"{fab.name} !!!CreateCollider  deg: {data.deg} up:{data.size} radius:{data.radius}");
+            LSDebug.Trace($"{fab.name} !!!CreateCollider  deg: {data.deg} up:{data.size} radius:{data.radius}");
 #endif
             var colFab = new ColliderPrefab();
             colFab.parts.Add(new ColliderPart() {

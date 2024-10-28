@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lockstep.Collision2D;
+using Lockstep.Logging;
 using Lockstep.Math;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
     public interface IUpdate {
@@ -62,7 +62,7 @@ namespace Lockstep.Logic {
         public static int _IdCounter;
 
         public BaseEntity(){
-            Debug.Trace("BaseEntity  " + _IdCounter.ToString(), true);
+            LSDebug.Trace("BaseEntity  " + _IdCounter.ToString(), true);
             EntityId = _IdCounter++;
             rigidbody.transform2D = transform;
         }

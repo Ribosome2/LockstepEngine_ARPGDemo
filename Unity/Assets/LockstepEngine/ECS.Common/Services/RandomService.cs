@@ -50,7 +50,7 @@ namespace Lockstep.Game {
         }
 
         public override void Backup(int tick){
-            Debug.Assert(tick == CurTick, $"CurTick{CurTick} tick {tick}");
+            LSDebug.Assert(tick == CurTick, $"CurTick{CurTick} tick {tick}");
             cmdBuffer.Execute(tick, new RandomCmd());
         }
     }

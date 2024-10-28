@@ -2,7 +2,6 @@ using Lockstep.Collision2D;
 using Lockstep.Math;
 using UnityEngine;
 using UnitySampleAssets.CrossPlatformInput;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.Logic {
     public class InputManager : UnityEngine.MonoBehaviour {

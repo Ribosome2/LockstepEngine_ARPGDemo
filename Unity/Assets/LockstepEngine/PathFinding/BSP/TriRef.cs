@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Lockstep.Collision2D;
+using Lockstep.Logging;
 using Lockstep.Math;
-using Debug = Lockstep.Logging.Debug;
 
 namespace Lockstep.PathFinding {
     public class TriRef {
@@ -52,7 +52,7 @@ namespace Lockstep.PathFinding {
         void CheckValid(){
             for (int i = 0; i < 3; i++) {
                 if (borders[i].dir == LVector2.zero) {
-                    Debug.Assert(false);
+                    LSDebug.Assert(false);
                 }
             }
         }
