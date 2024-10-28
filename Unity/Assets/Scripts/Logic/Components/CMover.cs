@@ -23,7 +23,10 @@ namespace Lockstep.Logic {
                 var dir = input.inputUV.normalized;
                 transform.pos = transform.pos + dir * speed * deltaTime;
                 var targetDeg = dir.ToDeg();
-                transform.deg = CTransform2D.TurnToward(targetDeg, transform.deg, 360 * deltaTime, out var hasReachDeg);
+                //todo:一直摁着一个方向，有时都会出现y角度 晃动明显的情况，这里的实现有问题，先不要插值了
+                // transform.deg = CTransform2D.TurnToward(targetDeg, transform.deg, 360 * deltaTime, out var hasReachDeg);
+                transform.deg = targetDeg;
+                // UnityEngine.Debug.Log("deg "+ transform.deg);
             }
 
             hasReachTarget = !needAc;
@@ -36,19 +39,19 @@ namespace Lockstep.Logic {
                 return;
             }
             var targetPos = InputManager.mousePos;
-            var movement = targetPos - transform2D.pos;
+            var movement = targetPos - transform.pos;
             var hasReachPos = movement.sqrMagnitude < _sqrStopDist;
             if (!hasReachPos) {
                 movement = movement.normalized * speed * deltaTime;
-                transform2D.pos = transform2D.pos + movement;
+                transform.pos = transform.pos + movement;
             }
 
-            var deg = CTransform2D.TurnToward(targetPos, transform2D.pos,
-                transform2D.deg, 150 * deltaTime,
+            var deg = CTransform2D.TurnToward(targetPos, transform.pos,
+                transform.deg, 150 * deltaTime,
                 out var hasReachDeg);
 
             if (!hasReachDeg) {
-                transform2D.deg = deg;
+                transform.deg = deg;
             }
 
             hasReachTarget = hasReachPos & hasReachDeg;

@@ -49,6 +49,10 @@ namespace Lockstep.Logic {
 
         public void BindEntity(BaseEntity entity){
             owner = entity as Player;
+            if (owner == null)
+            {
+                Debug.LogError("Null owner ");
+            }
             var config = ResourceManager.Instance.GetPlayerConfig(owner.PrefabId);
             shootTrans = transform.Find(config.attackTransName);
             var go = transform.Find(config.attackTransName);
@@ -70,11 +74,18 @@ namespace Lockstep.Logic {
         }
 
         private void Update(){
+            if (owner == null)
+            {
+                return;
+            }
             var pos = owner.transform.Pos3.ToVector3();
             transform.position = Vector3.Lerp(transform.position, pos, 0.3f);
+            //todo:一直摁着一个方向，有时都会出现y角度 晃动明显的情况，待优化
             var deg = owner.transform.deg.ToFloat();
-            //deg = Mathf.Lerp(transform.rotation.eulerAngles.y, deg, 0.3f);
-            transform.rotation = Quaternion.Euler(0, deg, 0);// Quaternion.Lerp(transform.rotation,Quaternion.Euler(0, deg, 0),0.3f) ;
+            transform.rotation = Quaternion.Euler(0, deg, 0);
+            
+            // deg = Mathf.Lerp(transform.rotation.eulerAngles.y, deg, 0.3f);
+            // Quaternion.Lerp(transform.rotation,Quaternion.Euler(0, deg, 0),0.3f) ;
         }
 
         public void TakeDamage(int amount, LVector3 hitPoint){
