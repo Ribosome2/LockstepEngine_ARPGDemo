@@ -1,5 +1,6 @@
 using Lockstep.Collision2D;
 using Lockstep.Math;
+using UnityEngine;
 
 namespace Lockstep.Logic {
     public partial class CMover : PlayerComponent {
@@ -20,6 +21,7 @@ namespace Lockstep.Logic {
 #if true
             var needAc = input.inputUV.sqrMagnitude > new LFloat(true, 10);
             if (needAc) {
+                Debug.Log("Input "+input.inputUV);
                 var dir = input.inputUV.normalized;
                 transform.pos = transform.pos + dir * speed * deltaTime;
                 var targetDeg = dir.ToDeg();
