@@ -18,6 +18,7 @@ namespace Lockstep.Logic {
         public LFloat cdTimer;
         public EAnimDefine animName;
         public KeyCode fireKeyCode;
+        [Header("技能Parts做完延迟多久才算技能结束")]
         public LFloat doneDelay;
         public int targetLayer;
         public bool needMove=false;
@@ -29,7 +30,8 @@ namespace Lockstep.Logic {
         }
 
         private ESkillState state;
-        [Header("__Debug")] [SerializeField] public LFloat maxPartTime;
+        [Header("__Debug下面的都是调试看的动态值，inspector填无意义")] 
+        [SerializeField] public LFloat maxPartTime;  //根据技能Parts自动计算出来的值
         [SerializeField] private LFloat skillTimer;
         [SerializeField] private bool __DebugFireOnce = false;
         private PlayerView view;
@@ -42,7 +44,7 @@ namespace Lockstep.Logic {
 
         void ResortSkill(){
             parts.Sort((a, b) => LMath.Sign(a.startTimer - b.startTimer));
-            var time = LFloat.MinValue;
+            var time = new LFloat(0); //没有skillPart的话，可以用0，而不是负数
             foreach (var part in parts) {
                 part.startTimer = part.startTimer * SkillPart.AnimFrameScale;
                 var partDeadTime = part.DeadTimer;
@@ -58,6 +60,7 @@ namespace Lockstep.Logic {
             if (cdTimer <= 0 && state == ESkillState.Idle) {
                 cdTimer = CD;
                 skillTimer = LFloat.zero;
+                
                 foreach (var part in parts) {
                     part.counter = 0;
                 }

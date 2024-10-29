@@ -5553,6 +5553,7 @@ MonoBehaviour:
   doneDelay:
     _val: 300
   targetLayer: 1
+  needMove: 0
   parts: []
   maxPartTime:
     _val: 0
@@ -5601,14 +5602,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CD:
-    _val: 4000
+    _val: 2000
   cdTimer:
     _val: 0
   animName: 12
   fireKeyCode: 0
   doneDelay:
-    _val: 300
+    _val: 3000
   targetLayer: 0
+  needMove: 0
   parts: []
   maxPartTime:
     _val: 4000

@@ -111,11 +111,11 @@ public class CAnimation : MonoBehaviour, IView
     {
         if (useAnimator)
         {
-            if (isCrossfade)
-            {
-                animatorComp.CrossFade(CurAnimName, 0.3f);
-            }
-            else
+            // if (isCrossfade)
+            // {
+            //     animatorComp.CrossFade(CurAnimName, 0.3f);
+            // }
+            // else
             {
                 
                 animatorComp.SetBool(AnimDefine.Idle,false);
